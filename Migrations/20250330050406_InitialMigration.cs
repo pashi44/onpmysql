@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace onpmysql.Migrations
 {
     /// <inheritdoc />
-    public partial class InitailSchema : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,27 +15,29 @@ namespace onpmysql.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "coronas",
+                name: "twitter",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    C0 = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Geo = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Geo = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Text = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Text = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Location = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    User = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Entites = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Location = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Sentiment = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Entities = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Country = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    Sentiment = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Country = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_coronas", x => x.Id);
+                    table.PrimaryKey("PK_twitter", x => x.C0);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
@@ -44,7 +46,7 @@ namespace onpmysql.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "coronas");
+                name: "twitter");
         }
     }
 }

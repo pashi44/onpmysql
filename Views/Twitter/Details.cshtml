@@ -1,0 +1,35 @@
+@model IEnumerable<Twitter>
+
+<h1>Twitter Records</h1>
+
+<table class="table bg-cream">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Country</th>
+            <th>Text</th>
+            <th>Entites</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.C0</td>
+@if (item.Country == null)
+{
+    item.Country = "India";
+}
+<td>
+    @item.Country
+</td>
+                <td>@item.Text</td>
+                <td>@item.User</td>
+
+                <td>
+                    <a asp-action="DetailbyId" asp-route-id="@item.C0">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

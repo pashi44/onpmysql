@@ -1,0 +1,19 @@
+@model Twitter
+
+<body class="body bg-dark">
+<h1>Details</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">ID</dt>
+        <dd class="col-sm-10">@Model.C0</dd>
+
+        <dt class="col-sm-2">Country</dt>
+        <dd class="col-sm-10">@Model.Country</dd>
+
+        <dt class="col-sm-2">Text</dt>
+        <dd class="col-sm-10">@Model.Text</dd>
+    </dl>
+</div>
+<a asp-action="Details">Back to List</a>
+</body>

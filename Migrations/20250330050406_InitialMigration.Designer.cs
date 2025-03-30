@@ -10,8 +10,8 @@ using onpmysql.DbData;
 namespace onpmysql.Migrations
 {
     [DbContext(typeof(CsvDbContext))]
-    [Migration("20250329063126_InitailSchema")]
-    partial class InitailSchema
+    [Migration("20250330050406_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,40 +21,36 @@ namespace onpmysql.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("onpmysql.Models.Corona", b =>
+            modelBuilder.Entity("onpmysql.Models.Twitter", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("C0")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
-                    b.Property<string>("Entites")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                    b.Property<string>("Entities")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Geo")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Location")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Sentiment")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Text")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("longtext");
 
-                    b.HasKey("Id");
+                    b.Property<string>("User")
+                        .HasColumnType("longtext");
 
-                    b.ToTable("coronas");
+                    b.HasKey("C0");
+
+                    b.ToTable("twitter", (string)null);
                 });
 #pragma warning restore 612, 618
         }
