@@ -20,8 +20,9 @@ public class TwitterController : Controller
     public async Task<IActionResult> Details()
     {
 
-        var  records=await _repository.GetAllAsync();
-
+var records =await _repository.GetAllAsync();
+        if(records   == null)  return NotFound();
+else
         return View(records);
 
     }
@@ -35,14 +36,13 @@ public class TwitterController : Controller
         {
             return NotFound();
         }
-        return   View(corona);
+        return    Ok(corona);
     }
-
-    public async Task<ActionResult<Twitter>> GetById([FromRoute] long id)
+    public async Task<ActionResult<Twitter>> GetById( long id)
     {
         var record = await _repository.GetByIdAsync(id); //FindOne or FindASync
         if (record == null) return NotFound();
-        return Ok(record);
+        return   View(record);
     }
 
     [HttpGet("country/{country}")]

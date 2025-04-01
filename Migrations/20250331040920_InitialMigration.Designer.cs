@@ -10,7 +10,7 @@ using onpmysql.DbData;
 namespace onpmysql.Migrations
 {
     [DbContext(typeof(CsvDbContext))]
-    [Migration("20250330050406_InitialMigration")]
+    [Migration("20250331040920_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
