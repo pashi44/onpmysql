@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using onpmysql.DbData;
 using onpmysql.Models;
 using onpmysql.Repositories;
+using ZomatoDb;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -23,9 +24,10 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
- app.UseHsts();
+    app.UseHsts();
 }
-if(app.Environment.IsDevelopment()){
+if (app.Environment.IsDevelopment())
+{
 
     app.UseSwagger();
     app.UseExceptionHandler("/Home/Error");
