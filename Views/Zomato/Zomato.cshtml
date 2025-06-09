@@ -1,0 +1,25 @@
+@model IEnumerable<ZomatoDb.Models.ZomatoModelOne>
+
+<h2>Zomato Restaurant List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Restaurant Name</th>
+            <th>City</th>
+            <th>Cuisine</th>
+            <th>Rating</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.RestaurantName</td>
+                <td>@item.City</td>
+                <td>@item.Cuisines</td>
+                <td>@item.AggregateRating</td>
+            </tr>
+        }
+    </tbody>
+</table>
