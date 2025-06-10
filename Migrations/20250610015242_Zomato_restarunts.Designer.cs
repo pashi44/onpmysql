@@ -12,8 +12,8 @@ using onpmysql.DbData;
 namespace onpmysql.Migrations
 {
     [DbContext(typeof(CsvDbContext))]
-    [Migration("20250609060001_ZoamtoMigration")]
-    partial class ZoamtoMigration
+    [Migration("20250610015242_Zomato_restarunts")]
+    partial class Zomato_restarunts
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,7 +107,7 @@ namespace onpmysql.Migrations
 
                     b.HasKey("RestaurantId");
 
-                    b.ToTable("ZomatotableEntity");
+                    b.ToTable("zomato_restaurants", (string)null);
                 });
 
             modelBuilder.Entity("onpmysql.Models.Twitter", b =>

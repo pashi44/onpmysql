@@ -29,15 +29,15 @@ else
 
 [HttpGet("{id}")]
 
-    public async Task<IActionResult> DetailbyId(long id)
-    {
-        var corona = await _repository.GetByIdAsync(id);
-        if (corona == null)
-        {
-            return NotFound();
-        }
-        return    Ok(corona);
-    }
+    // public async Task<IActionResult> DetailbyId(long id)
+    // {
+        // var corona = await _repository.GetByIdAsync(id);
+        // if (corona == null)
+        // {
+            // return NotFound();
+        // }
+        // return    Ok(corona);
+    // }
     public async Task<ActionResult<Twitter>> GetById( long id)
     {
         var record = await _repository.GetByIdAsync(id); //FindOne or FindASync

@@ -104,7 +104,7 @@ namespace onpmysql.Migrations
 
                     b.HasKey("RestaurantId");
 
-                    b.ToTable("ZomatotableEntity");
+                    b.ToTable("zomato_restaurants", (string)null);
                 });
 
             modelBuilder.Entity("onpmysql.Models.Twitter", b =>

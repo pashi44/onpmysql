@@ -1,0 +1,24 @@
+@model ZomatoDb.Models.ZomatoModelOne
+
+<h2>Restaurant Details</h2>
+
+<table class="table table-striped">
+    <tr>
+        <th>Restaurant Name:</th>
+        <td>@Model.RestaurantName</td>
+    </tr>
+    <tr>
+        <th>City:</th>
+        <td>@Model.City</td>
+    </tr>
+    <tr>
+        <th>Cuisines:</th>
+        <td>@Model.Cuisines</td>
+    </tr>
+    <tr>
+        <th>Rating:</th>
+        <td>@Model.AggregateRating</td>
+    </tr>
+</table>
+
+<a href="records" class="btn btn-secondary">Back to List</a>

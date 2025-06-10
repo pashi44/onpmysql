@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace onpmysql.Migrations
 {
     /// <inheritdoc />
-    public partial class ZoamtoMigration : Migration
+    public partial class Zomato_restarunts : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,7 +42,7 @@ namespace onpmysql.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ZomatotableEntity",
+                name: "zomato_restaurants",
                 columns: table => new
                 {
                     RestaurantId = table.Column<int>(type: "int", nullable: false)
@@ -81,7 +81,7 @@ namespace onpmysql.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ZomatotableEntity", x => x.RestaurantId);
+                    table.PrimaryKey("PK_zomato_restaurants", x => x.RestaurantId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
@@ -93,7 +93,7 @@ namespace onpmysql.Migrations
                 name: "twitter");
 
             migrationBuilder.DropTable(
-                name: "ZomatotableEntity");
+                name: "zomato_restaurants");
         }
     }
 }

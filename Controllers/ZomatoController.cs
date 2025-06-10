@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using onpmysql.DbData;
 using ZomatoDb.Models;
-[Route("zomato/[controller]")]
-
+// [Route("[controller]")]
+[Route("api/[controller]")]
+[ApiController]
+//  for  json apis not for razor vires
 public class ZomatoController : Controller
 {
     private readonly CsvDbContext _context;
@@ -12,10 +15,26 @@ public class ZomatoController : Controller
         _context = context;
     }
 
-    [Route("list")]
-    public IActionResult zomato()
+    // [Route("list")]
+    [HttpGet("records")]
+    public async Task<ActionResult<ZomatoModelOne>> zomato()
     {
-        var data = _context.ZomatotableEntity.ToList(); // Fetches from MySQL
+        var data = await _context.ZomatotableEntity.ToListAsync(); // Fetches from MySQL
         return View(data); // Passes to Razor View
     }
+
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ZomatoModelOne>> Details(int id)
+    {
+        var record =await  _context.ZomatotableEntity.FirstAsync<ZomatoModelOne>(
+            obj=>obj.RestaurantId ==id
+            );
+        if (record == null) return NotFound();
+
+        return View("Details", record);
+    }
+
+
+
 }
