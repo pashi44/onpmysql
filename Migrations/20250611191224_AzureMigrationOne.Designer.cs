@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using onpmysql.DbData;
 
@@ -11,9 +12,11 @@ using onpmysql.DbData;
 namespace onpmysql.Migrations
 {
     [DbContext(typeof(CsvDbContext))]
-    partial class CsvDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250611191224_AzureMigrationOne")]
+    partial class AzureMigrationOne
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,12 +27,12 @@ namespace onpmysql.Migrations
 
             modelBuilder.Entity("ZomatoDb.Models.ZomatoModelOne", b =>
                 {
-                    b.Property<long>("RestaurantId")
+                    b.Property<int>("RestaurantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
+                        .HasColumnType("int")
                         .HasColumnName("restaurant_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RestaurantId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RestaurantId"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)")
@@ -39,8 +42,8 @@ namespace onpmysql.Migrations
                         .HasColumnType("float")
                         .HasColumnName("aggregate_rating");
 
-                    b.Property<long?>("AverageCostForTwo")
-                        .HasColumnType("bigint")
+                    b.Property<int?>("AverageCostForTwo")
+                        .HasColumnType("int")
                         .HasColumnName("average_cost_for_two");
 
                     b.Property<string>("City")
@@ -48,8 +51,8 @@ namespace onpmysql.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("City");
 
-                    b.Property<long?>("CountryCode")
-                        .HasColumnType("bigint")
+                    b.Property<int?>("CountryCode")
+                        .HasColumnType("int")
                         .HasColumnName("country_code");
 
                     b.Property<string>("Cuisines")
@@ -118,13 +121,13 @@ namespace onpmysql.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasColumnName("switch_to_order_menu");
 
-                    b.Property<long?>("Votes")
-                        .HasColumnType("bigint")
+                    b.Property<int?>("Votes")
+                        .HasColumnType("int")
                         .HasColumnName("votes");
 
                     b.HasKey("RestaurantId");
 
-                    b.ToTable("zomatorestaurants", (string)null);
+                    b.ToTable("zomato_restaurants", (string)null);
                 });
 
             modelBuilder.Entity("onpmysql.Models.Twitter", b =>
@@ -136,32 +139,25 @@ namespace onpmysql.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("C0"));
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("country");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Entities")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("entities");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Geo")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("geo");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("location");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sentiment")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("sentiment");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("User")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("user");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("C0");
 

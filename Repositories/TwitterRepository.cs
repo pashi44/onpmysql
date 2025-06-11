@@ -7,18 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace onpmysql.Repositories;
 
-public class  TwitterRepository: ITwitterRepository
+public class TwitterRepository : ITwitterRepository
 {
     private readonly CsvDbContext _context;
 
     public TwitterRepository(CsvDbContext context)
-{        _context = context;
-}
-   public async Task<IEnumerable<Twitter>> GetAllAsync()
+    {
+        _context = context;
+    }
+    public async Task<IEnumerable<Twitter>> GetAllAsync()
     {
         return await _context.twitters.ToListAsync<Twitter>();
     }
-        public async Task<Twitter?> GetByIdAsync(long id)
+    public async Task<Twitter?> GetByIdAsync(long id)
     {
         return await _context.twitters.FindAsync(id);
     }
@@ -31,7 +32,7 @@ public class  TwitterRepository: ITwitterRepository
 
     public async Task UpdateAsync(Twitter entity)
     {
-        _context.twitters.Update(entity); 
+        _context.twitters.Update(entity);
         await _context.SaveChangesAsync();
     }
 

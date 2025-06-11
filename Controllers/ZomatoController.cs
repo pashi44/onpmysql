@@ -25,10 +25,10 @@ public class ZomatoController : Controller
 
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ZomatoModelOne>> Details(int id)
+    public async Task<ActionResult<ZomatoModelOne>> Details(long id)
     {
-        var record =await  _context.ZomatotableEntity.FirstAsync<ZomatoModelOne>(
-            obj=>obj.RestaurantId ==id
+        var record = await _context.ZomatotableEntity.FirstOrDefaultAsync<ZomatoModelOne>(
+            obj => obj.RestaurantId == id
             );
         if (record == null) return NotFound();
 

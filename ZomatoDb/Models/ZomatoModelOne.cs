@@ -6,14 +6,14 @@ namespace ZomatoDb.Models
     public class ZomatoModelOne
     {
         [Key]
-        public int RestaurantId { get; set; }
+        public long RestaurantId { get; set; }
 
         [MaxLength(255)]
         [Display(Name = "Restaurant Name")]
         public string? RestaurantName { get; set; }
 
         [Display(Name = "Country Code")]
-        public int? CountryCode { get; set; }
+        public long? CountryCode { get; set; }
 
         [MaxLength(100)]
         public string? City { get; set; }
@@ -37,7 +37,7 @@ namespace ZomatoDb.Models
         public string? Cuisines { get; set; }
 
         [Display(Name = "Average Cost for Two")]
-        public int? AverageCostForTwo { get; set; }
+        public long? AverageCostForTwo { get; set; }
 
         [MaxLength(50)]
         public string? Currency { get; set; }
@@ -58,7 +58,7 @@ namespace ZomatoDb.Models
         public string? SwitchToOrderMenu { get; set; }
 
         [Range(1, 5)]
-        public int? PriceRange { get; set; }
+        public long? PriceRange { get; set; }
 
         [Column(TypeName = "float")]
         [Range(0, 5)]
@@ -70,7 +70,7 @@ namespace ZomatoDb.Models
         [MaxLength(50)]
         public string? RatingText { get; set; }
 
-        public int? Votes { get; set; }
+        public long? Votes { get; set; }
 
         // (Optional) Add reference to user if you want to track who created this record
         // public string? UserId { get; set; } 
