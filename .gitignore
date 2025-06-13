@@ -10,9 +10,20 @@ obj/*
 appsettings.json
 appsettingsDevelopement.json
 
+
+
+Migrations 
+Migrations/*
+
+.gitignore
+
 build/
 build
 build/**
 build/*
 
 
+logs
+logs/**
+
+logs/*

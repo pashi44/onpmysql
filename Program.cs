@@ -4,20 +4,39 @@ using onpmysql.Models;
 using onpmysql.Repositories;
 
 using ZomatoDb;
+using Serilog;
 
-
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Verbose()
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.Console()
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Host.UseSerilog();
 
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<CsvDbContext>(
 
-options =>
- options.UseSqlServer(builder.Configuration.
-GetConnectionString("DefaultConnection")));
-// serverVersion: ServerVersion.AutoDetect(
-//     builder.Configuration.GetConnectionString("DefaultConnection"))));
+
+
+try
+{
+    builder.Services.AddDbContext<CsvDbContext>(options =>
+        options.UseMySql(
+            connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
+            serverVersion: ServerVersion.AutoDetect(
+                builder.Configuration.GetConnectionString("DefaultConnection")
+            )
+        )
+    );
+}
+catch (Exception ex)
+{
+    Console.WriteLine("❌ Failed to configure MySQL DbContext: " + ex.Message);
+    // You can also log the full exception or rethrow
+    // throw;
+}
+
 
 // builder.Services.AddDbContext<ZomatoDb>(options =>
 // options.UseMySql(builder.Configuration.GetConnectionString("ZomatoConnection"),
@@ -51,7 +70,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+// app.UseSerilogRequestLogging();
 app.UseAuthorization();
 
 app.MapControllerRoute(

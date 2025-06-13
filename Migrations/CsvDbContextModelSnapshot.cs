@@ -94,8 +94,8 @@ namespace onpmysql.Migrations
                         .HasColumnType("double")
                         .HasColumnName("longitude");
 
-                    b.Property<int?>("PriceRange")
-                        .HasColumnType("int")
+                    b.Property<long?>("PriceRange")
+                        .HasColumnType("bigint")
                         .HasColumnName("price_range");
 
                     b.Property<string>("RatingColor")
