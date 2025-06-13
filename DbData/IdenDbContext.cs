@@ -3,13 +3,21 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Configuration;
 
 
 public class IdenDbContext : IdentityDbContext<AppUser>
 {
-    public IdenDbContext(DbContextOptions<IdenDbContext> options)
-        : base(options) { }
+
+    private readonly IConfiguration _configuration;
+
+    public IdenDbContext(DbContextOptions<IdenDbContext> options, IConfiguration configuration)
+        : base(options)
+    {
+
+        _configuration = configuration;
+
+    }
 
 
 
@@ -17,6 +25,9 @@ public class IdenDbContext : IdentityDbContext<AppUser>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
+
+
+
     }
 
 
