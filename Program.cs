@@ -37,6 +37,13 @@ catch (Exception ex)
     // throw;
 }
 
+builder.Services.AddDbContext<IdenDbContext>(
+
+options =>
+options.UseSqlite(builder.Configuration.GetConnectionString("IdenConn"))
+);
+
+
 
 // builder.Services.AddDbContext<ZomatoDb>(options =>
 // options.UseMySql(builder.Configuration.GetConnectionString("ZomatoConnection"),
