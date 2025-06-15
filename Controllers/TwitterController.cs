@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using onpmysql.Models;
@@ -16,6 +17,8 @@ public class TwitterController : Controller
         _repository = repository;
     }
 
+
+[Authorize]
     [HttpGet]
     public async Task<IActionResult> Details()
     {

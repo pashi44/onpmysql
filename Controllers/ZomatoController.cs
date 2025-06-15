@@ -3,7 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using onpmysql.DbData;
 using Microsoft.Extensions.Logging;
 using ZomatoDb.Models;
+using Microsoft.AspNetCore.Authorization;
 // [Route("[controller]")]
+
+// [Authorize] //for the whole Controller
+
 [Route("api/[controller]")]
 [ApiController]
 //  for  json apis not for razor vires
@@ -18,15 +22,14 @@ public class ZomatoController : Controller
         _logger = logger;
     }
 
-    // [Route("list")]
+    [Authorize]
     [HttpGet("records")]
     public async Task<ActionResult<ZomatoModelOne>> Zomato()
     {
         var data = await _context.ZomatotableEntity.ToListAsync(); // Fetches from MySQL
         return View(data); // Passes to Razor View
     }
-
-
+[AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<ZomatoModelOne>> Details(long id)
     {

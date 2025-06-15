@@ -11,7 +11,7 @@ then
 fi
 
 # Get command line arguments
-DBCONTEXT=${1:-"CsvDbContext"}  # Default to CsvDbContext if not specified
+DBCONTEXT=${1:-"IdenDbContext"}  # Default to CsvDbContext if not specified
 MIGRATION_NAME=${2:-"InitialMigration"}  # Default migration name
 
 # Step 1: Build the project

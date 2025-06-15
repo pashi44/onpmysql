@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Identity;
-
+namespace Models.Identity;
 public class AppUser : IdentityUser
 {
 
@@ -8,6 +8,8 @@ public class AppUser : IdentityUser
 
     public string? Tagname = String.Empty;
     public String? ProfielPicture = String.Empty;
+
+    public bool Gender { get; set; }
 
 
 }
