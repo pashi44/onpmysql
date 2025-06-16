@@ -30,13 +30,13 @@ pipeline {
 
         stage('Restore') {
             steps {
-                sh '$HOME/dotnet/dotnet restore'
+                sh '$PATH/dotnet restore'
             }
         }
 
         stage('Build') {
             steps {
-                sh '$HOME/dotnet/dotnet build --configuration Release'
+                sh '$PATH/dotnet/dotnet build --configuration Release'
 
 
  }
@@ -44,7 +44,7 @@ pipeline {
 
         stage('Publish') {
             steps {
-                sh '$HOME/dotnet/dotnet publish -c Release -o ./publish'
+                sh '$PATH/dotnet publish -c Release -o ./publish'
             }
         }
 
