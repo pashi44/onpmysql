@@ -27,11 +27,13 @@ pipeline {
             }
         }
 
-        stage('Publish') {
-            steps {
-                sh '${DOTNET} publish onpmysql/onpmysql.csproj -c Release -o ./publish'
-            }
-        }
+        //stage('Publish') {
+          //  steps {
+            //    sh ' PROJECT=$(find . -name "*.csproj" | grep onpmysql)
+           //		 ${DOTNET} publish "$PROJECT" -c Release -o ./publish
+	//	'
+          //  }
+       // }
 
         stage('Build Docker Image') {
             steps {
