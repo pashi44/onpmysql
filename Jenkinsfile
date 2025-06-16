@@ -32,8 +32,11 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh '$HOME/dotnet/dotnet build --configuration Release'
-            }
+          //      sh '$HOME/dotnet/dotnet build --configuration Release'
+		  sh './gradlew   build'           
+
+
+ }
         }
 
         stage('Publish') {
@@ -42,11 +45,11 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
-            }
-        }
+        //stage('Build Docker Image') {
+          //  steps {
+            //    sh 'docker build -t $DOCKER_IMAGE .'
+            //}
+        //}
 //
   //      stage('Push Docker Image') {
      //       steps {
