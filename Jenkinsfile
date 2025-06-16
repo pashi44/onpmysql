@@ -17,7 +17,7 @@ pipeline {
 
         stage('Install .NET SDK') {
             steps {
-                sh 'wget https://dot.net/v1/dotnet-install.sh'
+                sh 'curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version $DOTNET_VERSION --install-dir $HOME/dotnet'
                 sh 'chmod +x dotnet-install.sh'
                 sh './dotnet-install.sh --version $DOTNET_VERSION --install-dir $HOME/dotnet'
          //       env.PATH = "${env.HOME}/dotnet:${env.PATH}"
@@ -32,8 +32,7 @@ pipeline {
 
         stage('Build') {
             steps {
-          //      sh '$HOME/dotnet/dotnet build --configuration Release'
-		  sh './gradlew   build'           
+                sh '$HOME/dotnet/dotnet build --configuration Release'
 
 
  }
