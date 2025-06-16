@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOTNET_VERSION = '8.0'
-        DOCKER_IMAGE = "pashi44/onpmysql:latest'
+        //DOCKER_IMAGE = "pashi44/onpmysql:latest'
         //DOCKER_CREDENTIALS_ID = 'dockerhub-creds' // from Jenkins credentials
     }
 
