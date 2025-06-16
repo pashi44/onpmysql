@@ -17,7 +17,11 @@ pipeline {
 
         stage('Install .NET SDK') {
             steps {
-                sh 'curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version $DOTNET_VERSION --install-dir $HOME/dotnet'
+		sh 	'''
+            		curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version $DOTNET_VERSION --install-dir $HOME/dotnet
+            		echo "## PATH EXPORT ##"
+           		 export PATH=$HOME/dotnet:$PATH
+        		'''
                 sh 'chmod +x dotnet-install.sh'
                 sh './dotnet-install.sh --version $DOTNET_VERSION --install-dir $HOME/dotnet'
          //       env.PATH = "${env.HOME}/dotnet:${env.PATH}"
