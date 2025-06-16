@@ -20,7 +20,7 @@ pipeline {
                 sh 'wget https://dot.net/v1/dotnet-install.sh'
                 sh 'chmod +x dotnet-install.sh'
                 sh './dotnet-install.sh --version $DOTNET_VERSION --install-dir $HOME/dotnet'
-                env.PATH = "${env.HOME}/dotnet:${env.PATH}"
+         //       env.PATH = "${env.HOME}/dotnet:${env.PATH}"
             }
         }
 
