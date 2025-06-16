@@ -29,7 +29,7 @@ pipeline {
 
         stage('Publish') {
             steps {
-                sh '${DOTNET} publish -c Release -o ./publish'
+                sh '${DOTNET} publish onpmysql/onpmysql.csproj -c Release -o ./publish'
             }
         }
 
