@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Models.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -20,7 +21,31 @@ Log.Logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+ c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+ {
+ Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+ Name = "Authorization",
+ In = ParameterLocation.Header,
+ Type = SecuritySchemeType.ApiKey,
+ Scheme = "Bearer"
+ });
+ c.AddSecurityRequirement(new OpenApiSecurityRequirement
+ {
+ {
+ new OpenApiSecurityScheme
+ {
+ Reference = new OpenApiReference
+ {
+ Type = ReferenceType.SecurityScheme,
+Id = "Bearer"
+ }
+ },
+ new string[] { }
+ }
+ });
+});
 
 try
 {
@@ -75,13 +100,13 @@ options =>
 
 
 }
-).AddJwtBearer(
+).AddJwtBearer("Bearer",
 options =>
 {
 
     System.String? secret = builder.Configuration["JwtConfig:Secret"];
     System.String? issuer = builder.Configuration["JwtConfig:ValidIssuer"];
-    System.String? audience = builder.Configuration["JwtConfig:ValidAudience"];
+    System.String? audience = builder.Configuration["JwtConfig:ValidAudiences"];
 
     if ((secret == null || issuer == null || audience == null))
         throw new ApplicationException("JWT token audience or issuer isnt set");
@@ -91,8 +116,13 @@ options =>
     options.TokenValidationParameters = new()
     {
 
-        ValidateIssuer = true,
-        ValidateAudience = true,
+
+
+ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+     
         ValidAudience = audience,
         ValidIssuer = issuer,
 
@@ -100,14 +130,9 @@ options =>
 
 
     };
-
-
 }
 
 );
-
-
-
 
 
 var app = builder.Build();

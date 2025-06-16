@@ -4,6 +4,8 @@ using onpmysql.DbData;
 using Microsoft.Extensions.Logging;
 using ZomatoDb.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 // [Route("[controller]")]
 
 // [Authorize] //for the whole Controller
@@ -29,7 +31,7 @@ public class ZomatoController : Controller
         var data = await _context.ZomatotableEntity.ToListAsync(); // Fetches from MySQL
         return View(data); // Passes to Razor View
     }
-[AllowAnonymous]
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<ZomatoModelOne>> Details(long id)
     {
@@ -39,7 +41,7 @@ public class ZomatoController : Controller
         var record = await _context.ZomatotableEntity.FirstOrDefaultAsync<ZomatoModelOne>(
             obj => obj.RestaurantId == id
             );
-        if (record == null) return NotFound();
+        if (record == null) return BadRequest(ModelState);
 
         return View("Details", record);
     }
