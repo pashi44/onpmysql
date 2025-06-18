@@ -134,6 +134,25 @@ ValidateIssuer = true,
 
 );
 
+//adding the role sto the authentication 
+/*Adds and configures the identity system for the specified User type.
+ Role services are not added by default but can be
+  added with IdentityBuilder.AddRoles().
+*/
+
+builder.Services.AddIdentityCore<AppUser>().
+AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<IdenDbContext>()
+.AddDefaultTokenProviders();
+
+
+//scoped service for  adding roles 
+
+
+
+
+
+
 
 var app = builder.Build();
 
