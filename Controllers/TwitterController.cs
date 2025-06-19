@@ -18,7 +18,7 @@ public class TwitterController : Controller
     }
 
 
-[Authorize]
+// [Authorize]
     [HttpGet]
     public async Task<IActionResult> Details()
     {

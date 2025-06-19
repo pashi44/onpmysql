@@ -21,7 +21,7 @@ build/
 build
 build/**
 build/*
-
+.env
 
 logs
 logs/**

@@ -11,7 +11,9 @@ using System.Text;
 using Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Writers;
+using DotNetEnv;
+
+DotNetEnv.Env.Load();
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -20,32 +22,43 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Host.UseSerilog();
+
+
+
+if (builder.Environment.IsDevelopment())
+{
+
+
+    builder.Configuration.AddUserSecrets<Program>();
+
+}
 
 builder.Services.AddSwaggerGen(c =>
 {
- c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
- {
- Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
- Name = "Authorization",
- In = ParameterLocation.Header,
- Type = SecuritySchemeType.ApiKey,
- Scheme = "Bearer"
- });
- c.AddSecurityRequirement(new OpenApiSecurityRequirement
- {
- {
- new OpenApiSecurityScheme
- {
- Reference = new OpenApiReference
- {
- Type = ReferenceType.SecurityScheme,
-Id = "Bearer"
- }
- },
- new string[] { }
- }
- });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
 });
 
 try
@@ -67,143 +80,102 @@ catch (Exception ex)
 }
 
 // builder.Services.AddDbContext<ZomatoDb>(options =>
-// options.UseMySql(builder.Configuration.GetConnectionString("ZomatoConnection"),
-// new MySqlServerVersion(new Version(8, 0, 0)))
+//     options.UseMySql(builder.Configuration.GetConnectionString("ZomatoConnection"),
+//     new MySqlServerVersion(new Version(8, 0, 0)))
 // );
 
-
-//modeled in the iden.cs 
+// modeled in the iden.cs 
 builder.Services.AddDbContext<IdenDbContext>(
-options =>
-// options.UseSqlite(builder.Configuration.GetConnectionString("IdenConn"))
-options.UseSqlite(builder.Configuration["ConnectionStrings:IdenConn"])
+    options =>
+    // options.UseSqlite(builder.Configuration.GetConnectionString("IdenConn"))
+    options.UseSqlite(builder.Configuration["ConnectionStrings:IdenConn"])
 );
 
-//registered     authorization of type AppUserservice to  the middleware
-//from IdenDbStore
+// registered authorization of type AppUserService to the middleware
+// from IdenDbStore
 builder.Services.AddIdentityCore<AppUser>()
-.AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<IdenDbContext>()
-.AddDefaultTokenProviders();
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<IdenDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<ITwitterRepository, TwitterRepository>();
 
 builder.Services.AddControllersWithViews();
 
-
-builder.Services.AddAuthentication(
-
-options =>
+builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
-
-
-}
-).AddJwtBearer("Bearer",
-options =>
+})
+.AddJwtBearer("Bearer", options =>
 {
-
     System.String? secret = builder.Configuration["JwtConfig:Secret"];
     System.String? issuer = builder.Configuration["JwtConfig:ValidIssuer"];
     System.String? audience = builder.Configuration["JwtConfig:ValidAudiences"];
 
     if ((secret == null || issuer == null || audience == null))
-        throw new ApplicationException("JWT token audience or issuer isnt set");
+        throw new ApplicationException("JWT token audience or issuer isn't set");
+
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
 
-    options.TokenValidationParameters = new()
+    options.TokenValidationParameters = new TokenValidationParameters()
     {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
 
-
-
-ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-     
         ValidAudience = audience,
         ValidIssuer = issuer,
 
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
-
-
     };
-}
-
-);
-
-
+});
 
 var app = builder.Build();
-//scoped service for  adding roles 
 
-
-    using (var serviceScope = app.Services.CreateScope())
-    {
-        var services = serviceScope.ServiceProvider;
-        var roleManager =  services
-        .GetRequiredService<RoleManager<IdentityRole>>();
-
-//theese scoped service cretae the AspNetROles in the dbStore
-        if (!await roleManager.RoleExistsAsync(AppRoles.User))
-        {
-            await roleManager.CreateAsync(
-                new IdentityRole(AppRoles.User)
-            );
-
-        }
-
-        if (!await roleManager.RoleExistsAsync(AppRoles.VipUser))
-        {
-            await roleManager.CreateAsync(
-                new IdentityRole(AppRoles.VipUser)
-            );
-
-        }
-        
-               if (!await roleManager.RoleExistsAsync(AppRoles.Administrator))
-        {
-            await roleManager.CreateAsync(
-                new IdentityRole(AppRoles.Administrator)
-            );
-
-        }
-
-
-
-
-    }//cretae service scope
-
-
-
-
-
-if (!app.Environment.IsDevelopment())
+// scoped service for adding roles 
+using (var serviceScope = app.Services.CreateScope())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
+    var services = serviceScope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+    // these scoped services create the AspNetRoles in the db store
+    if (!await roleManager.RoleExistsAsync(AppRoles.User))
+    {
+        await roleManager.CreateAsync(new IdentityRole(AppRoles.User));
+    }
+
+    if (!await roleManager.RoleExistsAsync(AppRoles.VipUser))
+    {
+        await roleManager.CreateAsync(new IdentityRole(AppRoles.VipUser));
+    }
+
+    if (!await roleManager.RoleExistsAsync(AppRoles.Administrator))
+    {
+        await roleManager.CreateAsync(new IdentityRole(AppRoles.Administrator));
+    }
+} // create service scope
+
+
 if (app.Environment.IsDevelopment())
 {
 
     app.UseSwagger();
     app.UseExceptionHandler("/Home/Error");
-
     app.UseHsts();
     app.UseSwaggerUI();
-
-
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-// app.UseSerilogRequestLogging();
+
+// app.UseSerilogRequestLogging(); // optionally enable request logging
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -211,7 +183,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
 
 app.Run();

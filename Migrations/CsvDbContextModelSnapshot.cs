@@ -18,9 +18,9 @@ namespace onpmysql.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.17")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("ZomatoDb.Models.ZomatoModelOne", b =>
                 {
@@ -29,13 +29,13 @@ namespace onpmysql.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("restaurant_id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RestaurantId"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("RestaurantId"));
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("address");
 
-                    b.Property<double?>("AggregateRating")
+                    b.Property<float?>("AggregateRating")
                         .HasColumnType("float")
                         .HasColumnName("aggregate_rating");
 
@@ -45,7 +45,7 @@ namespace onpmysql.Migrations
 
                     b.Property<string>("City")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("varchar(100)")
                         .HasColumnName("City");
 
                     b.Property<long?>("CountryCode")
@@ -54,27 +54,27 @@ namespace onpmysql.Migrations
 
                     b.Property<string>("Cuisines")
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("cuisines");
 
                     b.Property<string>("Currency")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("currency");
 
                     b.Property<string>("HasOnlineDelivery")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
+                        .HasColumnType("varchar(10)")
                         .HasColumnName("has_online_delivery");
 
                     b.Property<string>("HasTableBooking")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
+                        .HasColumnType("varchar(10)")
                         .HasColumnName("has_table_booking");
 
                     b.Property<string>("IsDeliveringNow")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
+                        .HasColumnType("varchar(10)")
                         .HasColumnName("is_delivering_now");
 
                     b.Property<double?>("Latitude")
@@ -83,7 +83,7 @@ namespace onpmysql.Migrations
 
                     b.Property<string>("Locality")
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("locality");
 
                     b.Property<string>("LocalityVerbose")
@@ -100,22 +100,22 @@ namespace onpmysql.Migrations
 
                     b.Property<string>("RatingColor")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("rating_color");
 
                     b.Property<string>("RatingText")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("rating_text");
 
                     b.Property<string>("RestaurantName")
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)")
+                        .HasColumnType("varchar(255)")
                         .HasColumnName("restaurant_name");
 
                     b.Property<string>("SwitchToOrderMenu")
                         .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
+                        .HasColumnType("varchar(10)")
                         .HasColumnName("switch_to_order_menu");
 
                     b.Property<long?>("Votes")
@@ -133,34 +133,34 @@ namespace onpmysql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("C0"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("C0"));
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("country");
 
                     b.Property<string>("Entities")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("entities");
 
                     b.Property<string>("Geo")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("geo");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("location");
 
                     b.Property<string>("Sentiment")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("sentiment");
 
                     b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("text");
 
                     b.Property<string>("User")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("longtext")
                         .HasColumnName("user");
 
                     b.HasKey("C0");

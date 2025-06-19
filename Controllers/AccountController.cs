@@ -131,12 +131,17 @@ newUser, new List<string> { AppRoles.User, AppRoles.VipUser }
 new Claim(ClaimTypes.Name,  user.UserName)
 
 
-        };//claims objecxt
+        };//claims  list
 #pragma warning restore CS8604 // Possible null reference argument.
 
         claims.AddRange(userRoles.Select(role =>
             
             new Claim(ClaimTypes.Role , user.UserName)));
+
+//  appended the claims 
+
+
+
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.
        GetBytes(secret));
