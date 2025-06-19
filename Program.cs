@@ -11,6 +11,7 @@ using System.Text;
 using Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Writers;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Verbose()
@@ -81,6 +82,7 @@ options.UseSqlite(builder.Configuration["ConnectionStrings:IdenConn"])
 //registered     authorization of type AppUserservice to  the middleware
 //from IdenDbStore
 builder.Services.AddIdentityCore<AppUser>()
+.AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<IdenDbContext>()
 .AddDefaultTokenProviders();
 
@@ -134,27 +136,51 @@ ValidateIssuer = true,
 
 );
 
-//adding the role sto the authentication 
-/*Adds and configures the identity system for the specified User type.
- Role services are not added by default but can be
-  added with IdentityBuilder.AddRoles().
-*/
-
-builder.Services.AddIdentityCore<AppUser>().
-AddRoles<IdentityRole>()
-.AddEntityFrameworkStores<IdenDbContext>()
-.AddDefaultTokenProviders();
-
-
-//scoped service for  adding roles 
-
-
-
-
-
 
 
 var app = builder.Build();
+//scoped service for  adding roles 
+
+
+    using (var serviceScope = app.Services.CreateScope())
+    {
+        var services = serviceScope.ServiceProvider;
+        var roleManager =  services
+        .GetRequiredService<RoleManager<IdentityRole>>();
+
+//theese scoped service cretae the AspNetROles in the dbStore
+        if (!await roleManager.RoleExistsAsync(AppRoles.User))
+        {
+            await roleManager.CreateAsync(
+                new IdentityRole(AppRoles.User)
+            );
+
+        }
+
+        if (!await roleManager.RoleExistsAsync(AppRoles.VipUser))
+        {
+            await roleManager.CreateAsync(
+                new IdentityRole(AppRoles.VipUser)
+            );
+
+        }
+        
+               if (!await roleManager.RoleExistsAsync(AppRoles.Administrator))
+        {
+            await roleManager.CreateAsync(
+                new IdentityRole(AppRoles.Administrator)
+            );
+
+        }
+
+
+
+
+    }//cretae service scope
+
+
+
+
 
 if (!app.Environment.IsDevelopment())
 {

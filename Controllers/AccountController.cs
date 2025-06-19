@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using Serilog;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -65,9 +66,18 @@ public class AccountController : ControllerBase
             };
             //saving the suer to dbContext
             var result = await _userManager.CreateAsync(newUser, model.Password);
-            if (result.Succeeded)
+
+            var assiginingRoles =
+             await _userManager
+             .AddToRolesAsync(
+newUser, new List<string> { AppRoles.User, AppRoles.VipUser }
+
+
+            );
+           
+            if (result.Succeeded   && assiginingRoles.Succeeded)
             {
-                var token = GenerateToken(model.UserName);
+                var token = GenerateToken(model.UserName,  newUser);
                 return Ok(new { token });
             }
             foreach (var error in result.Errors)
@@ -97,7 +107,7 @@ public class AccountController : ControllerBase
      This process allows statelessß authentication, where no server-side session storage is required.*/
 
 
-    private string? GenerateToken(string userName)
+    private async Task<string?> GenerateToken(string? userName, AppUser  user )
     {
 
         //_congiurati injected into out clas. with Iconfiguration class
@@ -110,7 +120,25 @@ public class AccountController : ControllerBase
              new ApplicationException("Jwt is not set in the configuration");
         }
 
-        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.
+
+        var userRoles = await _userManager.GetRolesAsync(
+            user
+        );
+        ///claimsthat the  user of this model does have ,
+#pragma warning disable CS8604 // Possible null reference argument.
+        var claims = new List<Claim>
+        {
+new Claim(ClaimTypes.Name,  user.UserName)
+
+
+        };//claims objecxt
+#pragma warning restore CS8604 // Possible null reference argument.
+
+        claims.AddRange(userRoles.Select(role =>
+            
+            new Claim(ClaimTypes.Role , user.UserName)));
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.
        GetBytes(secret));
         Log.Information($"the signing key is {signingKey}");
 
@@ -129,10 +157,12 @@ public class AccountController : ControllerBase
         could be of anything,  Expires, Issuer*/
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-        {
- new Claim(ClaimTypes.Name, userName)
- }),
+            // Subject = new ClaimsIdentity(new[]
+            // {
+            //  new Claim(ClaimTypes.Name, userName)
+            //  }),
+
+Subject  = new ClaimsIdentity(claims:  claims),
             Expires = DateTime.UtcNow.AddDays(1),
             Issuer = issuer,
             Audience = audience,
@@ -144,6 +174,9 @@ public class AccountController : ControllerBase
        CreateToken(tokenDescriptor);
         var token = tokenHandler.WriteToken(securityToken);
         Log.Information($"{token}");
+     
+     
+     
         return token;
     }
 
@@ -166,7 +199,7 @@ public class AccountController : ControllerBase
                 if (await _userManager.CheckPasswordAsync(user, model.
                Password))
                 {
-                    var token = GenerateToken(model.UserName);
+                    var token = GenerateToken(model.UserName,  user);
                     return Ok(new { token });
                 }
             }

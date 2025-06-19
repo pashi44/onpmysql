@@ -24,7 +24,7 @@ public class ZomatoController : Controller
         _logger = logger;
     }
 
-    [Authorize]
+    [Authorize(Roles = "User")]
     [HttpGet("records")]
     public async Task<ActionResult<ZomatoModelOne>> Zomato()
     {

@@ -10,6 +10,7 @@ public class AppUser : IdentityUser
     public String? ProfielPicture = String.Empty;
 
     public bool Gender { get; set; }
-
+    // public override string? UserName {
+    //      get => base.UserName; set => base.UserName = value; }
 
 }
