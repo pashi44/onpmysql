@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using DotNetEnv;
 
+using StackExchange.Redis;
+
 DotNetEnv.Env.Load();
 
 Log.Logger = new LoggerConfiguration()
@@ -24,6 +26,13 @@ Log.Logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
+
+//builder.Services.AddSingleton<IConnectionMultiplexer>(
+//sp =>
+// ConnectionMultiplexer.Connect("localhost:6739")
+
+
+//);
 
 
 
@@ -104,11 +113,11 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
+   // options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer("Bearer", options =>
+.AddJwtBearer( options =>
 {
     System.String? secret = builder.Configuration["JwtConfig:Secret"];
     System.String? issuer = builder.Configuration["JwtConfig:ValidIssuer"];
@@ -133,6 +142,11 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
     };
 });
+
+
+
+//redis cache registering to  the middle pipeline
+// builder.Services.AddSingleton<ZomatoController>();
 
 var app = builder.Build();
 

@@ -70,7 +70,7 @@ public class AccountController : ControllerBase
             var assiginingRoles =
              await _userManager
              .AddToRolesAsync(
-newUser, new List<string> { AppRoles.User, AppRoles.VipUser }
+newUser, new List<string> { AppRoles.User}
 
 
             );
@@ -136,7 +136,7 @@ new Claim(ClaimTypes.Name,  user.UserName)
 
         claims.AddRange(userRoles.Select(role =>
             
-            new Claim(ClaimTypes.Role , user.UserName)));
+            new Claim(ClaimTypes.Role , role)));
 
 //  appended the claims 
 
