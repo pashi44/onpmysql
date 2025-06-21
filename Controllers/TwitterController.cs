@@ -18,8 +18,8 @@ public class TwitterController : Controller
     }
 
 
-// [Authorize]
-    [HttpGet]
+[Authorize(Roles = AppRoles.Administrator )]
+    [HttpGet(Name ="fetchallTwitterRecords")]
     public async Task<IActionResult> Details()
     {
 
@@ -40,6 +40,10 @@ public class TwitterController : Controller
     // }
     // return    Ok(corona);
     // }
+
+
+    [Authorize(Roles = $"{AppRoles.User}, {AppRoles.VipUser}, {AppRoles.Administrator}")]
+
     [HttpGet("{id}")]
     public async Task<ActionResult<Twitter>> DetailbyId(long id)
     {
@@ -47,6 +51,9 @@ public class TwitterController : Controller
         if (record == null) return NotFound();
         return View(record);
     }
+
+
+    [Authorize(Roles =   $"{AppRoles.User}, {AppRoles.Administrator}")]
 
     [HttpGet("country/{country}")]
     public async Task<ActionResult<IEnumerable<Twitter>>> GetByCountry([FromRoute] string country)

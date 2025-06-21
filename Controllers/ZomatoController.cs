@@ -29,7 +29,7 @@ public class ZomatoController : Controller
     {
         _context = context;
         _logger = logger;    }
-
+    
     [Authorize(Roles =   $"{AppRoles.User}, {AppRoles.VipUser}, {AppRoles.Administrator}")]
     // [Authorize(Roles = AppRoles.VipUser)]
 
@@ -60,4 +60,4 @@ public class ZomatoController : Controller
 
 
 
-}
+} 

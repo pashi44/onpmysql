@@ -48,11 +48,11 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         Name = "Authorization",
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Scheme = "Bearer",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Type = SecuritySchemeType.Http
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -72,7 +72,7 @@ builder.Services.AddSwaggerGen(c =>
 
 try
 {
-    builder.Services.AddDbContext<CsvDbContext>(options =>
+    builder.Services.AddDbContextPool<CsvDbContext>(options =>
         options.UseMySql(
             connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
             serverVersion: ServerVersion.AutoDetect(
@@ -94,7 +94,7 @@ catch (Exception ex)
 // );
 
 // modeled in the iden.cs 
-builder.Services.AddDbContext<IdenDbContext>(
+builder.Services.AddDbContextPool<IdenDbContext>(
     options =>
     // options.UseSqlite(builder.Configuration.GetConnectionString("IdenConn"))
     options.UseSqlite(builder.Configuration["ConnectionStrings:IdenConn"])
@@ -117,7 +117,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-.AddJwtBearer( options =>
+.AddJwtBearer("Bearer"  , options =>
 {
     System.String? secret = builder.Configuration["JwtConfig:Secret"];
     System.String? issuer = builder.Configuration["JwtConfig:ValidIssuer"];
