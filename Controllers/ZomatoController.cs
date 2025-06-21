@@ -12,7 +12,7 @@ using StackExchange.Redis;
 // [Route("[controller]")]
 
 // [Authorize] //for the whole Controller
-
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 //  for  json apis not for razor vires
@@ -29,7 +29,7 @@ public class ZomatoController : Controller
     {
         _context = context;
         _logger = logger;    }
-    
+
     [Authorize(Roles =   $"{AppRoles.User}, {AppRoles.VipUser}, {AppRoles.Administrator}")]
     // [Authorize(Roles = AppRoles.VipUser)]
 

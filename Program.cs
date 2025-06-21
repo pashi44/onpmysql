@@ -52,7 +52,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         Scheme = "Bearer",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http
+        Type =  SecuritySchemeType.Http
+        // Type =( SecuritySchemeType.Http  || SecuritySchemeType.ApiKey)
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -107,15 +108,18 @@ builder.Services.AddIdentityCore<AppUser>()
     .AddEntityFrameworkStores<IdenDbContext>()
     .AddDefaultTokenProviders();
 
+
+builder.Services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<IdenDbContext>();
 builder.Services.AddScoped<ITwitterRepository, TwitterRepository>();
 
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication(options =>
 {
-   // options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
+    // options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+
 })
 .AddJwtBearer("Bearer"  , options =>
 {
@@ -142,6 +146,10 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
     };
 });
+
+//for policy based  resource authorization 
+
+
 
 
 
@@ -197,5 +205,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapGroup(
+
+"/Identity"
+
+).MapIdentityApi<AppUser>();
 
 app.Run();

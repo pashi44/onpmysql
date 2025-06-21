@@ -129,14 +129,19 @@ newUser, new List<string> { AppRoles.User}
         var claims = new List<Claim>
         {
 new Claim(ClaimTypes.Name,  user.UserName)
-
-
+,
+new Claim(AppClaimTypes.DrivingCountry, AppClaimTypes.DrivingCountry)
         };//claims  list
 #pragma warning restore CS8604 // Possible null reference argument.
 
         claims.AddRange(userRoles.Select(role =>
             
-            new Claim(ClaimTypes.Role , role)));
+            new Claim(ClaimTypes.Role , role)
+            
+            )
+            
+            
+);
 
 //  appended the claims 
 
@@ -171,6 +176,7 @@ Subject  = new ClaimsIdentity(claims:  claims),
             Expires = DateTime.UtcNow.AddDays(1),
             Issuer = issuer,
             Audience = audience,
+
 
             SigningCredentials = new SigningCredentials(signingKey,
        SecurityAlgorithms.HmacSha256Signature)
