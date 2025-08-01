@@ -2,7 +2,14 @@ build
 build/**
 build/*
 
+obj/
+obj/**
+obj/*
 
+
+debug
+debug/**
+debug/*
 
 bin/
 bin/**
