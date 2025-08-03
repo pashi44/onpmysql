@@ -1,0 +1,3 @@
+[submodule "onpmysql/onpsqlview"]
+	path = onpmysql/onpsqlview
+	url = git@github.com:pashi44/onpmysql.git

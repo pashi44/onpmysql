@@ -25,10 +25,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
 
-
+// ✅ Define named CORS policy: "springreact"
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("springreact", policy =>
     {
         policy.WithOrigins("http://localhost:3000")
               .AllowAnyHeader()
@@ -36,15 +36,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-
-
-
 if (builder.Environment.IsDevelopment())
 {
-
-
     builder.Configuration.AddUserSecrets<Program>();
-
 }
 
 builder.Services.AddSwaggerGen(c =>
@@ -73,6 +67,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// ✅ MySQL context
 try
 {
     builder.Services.AddDbContext<CsvDbContext>(options =>
@@ -87,114 +82,94 @@ try
 catch (Exception ex)
 {
     Console.WriteLine("❌ Failed to configure MySQL DbContext: " + ex.Message);
-    // You can also log the full exception or rethrow
-    // throw;
 }
 
-// builder.Services.AddDbContext<ZomatoDb>(options =>
-//     options.UseMySql(builder.Configuration.GetConnectionString("ZomatoConnection"),
-//     new MySqlServerVersion(new Version(8, 0, 0)))
-// );
-
-// modeled in the iden.cs 
-builder.Services.AddDbContext<IdenDbContext>(
-    options =>
-    // options.UseSqlite(builder.Configuration.GetConnectionString("IdenConn"))
+// ✅ SQLite Identity context
+builder.Services.AddDbContext<IdenDbContext>(options =>
     options.UseSqlite(builder.Configuration["ConnectionStrings:IdenConn"])
 );
 
-// registered authorization of type AppUserService to the middleware
-// from IdenDbStore
+// ✅ Identity setup
 builder.Services.AddIdentityCore<AppUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdenDbContext>()
     .AddDefaultTokenProviders();
 
+// ✅ App services
 builder.Services.AddScoped<ITwitterRepository, TwitterRepository>();
-
 builder.Services.AddControllersWithViews();
 
+// ✅ JWT authentication
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme; // Bearer 
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer("Bearer", options =>
 {
-    System.String? secret = builder.Configuration["JwtConfig:Secret"];
-    System.String? issuer = builder.Configuration["JwtConfig:ValidIssuer"];
-    System.String? audience = builder.Configuration["JwtConfig:ValidAudiences"];
+    string? secret = builder.Configuration["JwtConfig:Secret"];
+    string? issuer = builder.Configuration["JwtConfig:ValidIssuer"];
+    string? audience = builder.Configuration["JwtConfig:ValidAudiences"];
 
-    if ((secret == null || issuer == null || audience == null))
-        throw new ApplicationException("JWT token audience or issuer isn't set");
+    if (secret == null || issuer == null || audience == null)
+        throw new ApplicationException("JWT token configuration is missing.");
 
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
 
-    options.TokenValidationParameters = new TokenValidationParameters()
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-
-        ValidAudience = audience,
         ValidIssuer = issuer,
-
+        ValidAudience = audience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
     };
 });
 
 var app = builder.Build();
 
-// scoped service for adding roles 
+// ✅ Create roles if not present
 using (var serviceScope = app.Services.CreateScope())
 {
     var services = serviceScope.ServiceProvider;
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-    // these scoped services create the AspNetRoles in the db store
     if (!await roleManager.RoleExistsAsync(AppRoles.User))
-    {
         await roleManager.CreateAsync(new IdentityRole(AppRoles.User));
-    }
 
     if (!await roleManager.RoleExistsAsync(AppRoles.VipUser))
-    {
         await roleManager.CreateAsync(new IdentityRole(AppRoles.VipUser));
-    }
 
     if (!await roleManager.RoleExistsAsync(AppRoles.Administrator))
-    {
         await roleManager.CreateAsync(new IdentityRole(AppRoles.Administrator));
-    }
-} // create service scope
+}
 
-
+// ✅ Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
-
     app.UseSwagger();
+    app.UseSwaggerUI();
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
-    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
-// app.UseSerilogRequestLogging(); // optionally enable request logging
+// ✅ Apply CORS policy BEFORE auth
+app.UseCors("springreact");
 
-app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("springreact");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+    
