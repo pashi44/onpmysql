@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Reduce from "./UseRedu";
+
 
 // ✅ Initial object — not a class, just a reference type
 const andummyobject = {
@@ -10,7 +12,7 @@ const andummyobject = {
   }
 };
 
-function Objectlist(props) {
+function Objectlist({...props}) {
 
   // ✅ Create a safe base object to use in list initialization
   const baseObject = {
@@ -26,10 +28,9 @@ function Objectlist(props) {
     { ...baseObject }
   ]);
   
-  // ✅ Scalar state for input field
   const [inputValue, setInputValue] = useState("");
 
-  // ✅ This triggers non-scalar re-rendering
+  // This triggers non-scalar re-rendering
   // - by creating new object references for each element in the array
   const handleChangeAllNames = () => {
     setList((prevList) =>
@@ -70,7 +71,7 @@ const Make = () => {
   const [initialObject, setInitialObject] = useState({ ...andummyobject });
 
   /*
-    ✅ React looks out for scalar and non-scalar types to compare the modified DOM tree.
+     React looks out for scalar and non-scalar types to compare the modified DOM tree.
     
     - For scalar types (number, string, boolean), the returned values are by **value**.
       → So React automatically re-renders when a different value is passed.
@@ -90,7 +91,7 @@ const Make = () => {
         onClick={() =>
           setInitialObject((prev) => ({
             ...prev,
-            Name: "\t prashi",
+            Name: "\t   radare",
             count: prev.count + 1
           }))
         }
@@ -106,6 +107,7 @@ const Make = () => {
       <Objectlist lase="mouni" />
 
       <Objectlist />
+      <Reduce/>
     </div>
   );
 };
