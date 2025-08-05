@@ -1,12 +1,10 @@
 import React, { useReducer } from 'react';
-
-//  Initial state object for useReducer
+import { useEffect,useRef } from 'react';
 const initialState = {
   name: '',         // Current input value
   nameList: []      // List of submitted names
 };
 
-// Reducer function (called by dispatch)
 function reducer(state, action) {
   switch (action.type) {
     case 'SET_NAME':
@@ -33,6 +31,15 @@ export default function Reduce() {
   // dispatch is a function that calls the reducer function internally managed by React
   // reducer(state, action) → returns new state
   const [state, dispatch] = useReducer(reducer, initialState);
+
+   const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [state.nameList]); // 🔁 triggers when nameList updates
+
 
   return (
     <div style={{ padding: '20px' }}>

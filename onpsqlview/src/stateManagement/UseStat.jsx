@@ -36,7 +36,7 @@ function Objectlist({...props}) {
     setList((prevList) =>
       prevList.map((obj) => ({
         ...obj,
-        Name: inputValue || props.Name || props.lase || obj.Name // ✅ fallbacks
+        Name: inputValue || props.Name || props.lase || obj.Name 
       }))
     );
   };
