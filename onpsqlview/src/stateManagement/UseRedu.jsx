@@ -31,14 +31,14 @@ export default function Reduce() {
   // dispatch is a function that calls the reducer function internally managed by React
   // reducer(state, action) → returns new state
   const [state, dispatch] = useReducer(reducer, initialState);
-
+ 
    const inputRef = useRef(null);
 
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [state.nameList]); // 🔁 triggers when nameList updates
+  }, [state.nameList]); 
 
 
   return (

@@ -14,14 +14,14 @@ const andummyobject = {
 
 function Objectlist({...props}) {
 
-  // ✅ Create a safe base object to use in list initialization
+  // Create a safe base object to use in list initialization
   const baseObject = {
     ...andummyobject,     // fallback structure
     ...props.obj,         // override if passed
     Name: props.Name || props.lase || "N/A"  // use Name or lase if passed
   };
 
-  // ✅ Create the list using copies of the passed object (to avoid shared reference)
+  //  Create the list using copies of the passed object (to avoid shared reference)
   const [list, setList] = useState([
     { ...baseObject },
     { ...baseObject },
