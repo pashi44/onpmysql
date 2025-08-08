@@ -12,28 +12,23 @@ const myobj =  {
     Description : "thisis object  from redux store"
 } 
 
-
-
-const  myreducerFucntion =  ( initialstate  = myobj, action)=> 
+//limitataions of the the reducer functinis it should be synchronus funation and do not mutate the 
+// original state , rather  copy  a reference and append to re-render mouniting
+const  myreducerFucntion =  ( initialstate  =  myobj, action)=> 
 {
 switch(action.type){
-    
+case  "Get_state":
+  return  {...initialstate ,Name : action.payload}
 
 
     default: 
-    return   initialstate;
+    return   {...initialstate};
 
 }
 }
-
-
-
-
 
 const  store =  configureStore(
-    
-  {  reducer  : myreducerFucntion
-
+ {  reducer  : myreducerFucntion
 
   }
 

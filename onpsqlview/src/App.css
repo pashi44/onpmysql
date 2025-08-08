@@ -42,3 +42,17 @@
 
   background-color: brown;
 }
+
+
+.store{
+
+
+  position: relative;
+ padding: auto;
+ margin-left: 10px;
+ margin-top:   5rem;
+
+background-color: rgb(253 230 138);
+justify-content: space-between;
+
+}
